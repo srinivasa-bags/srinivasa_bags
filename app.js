@@ -1,13 +1,15 @@
 // --- Tailwind Config ---
-tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-          },
+if (typeof tailwind !== 'undefined') {
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         },
       },
-    };
+    },
+  };
+}
 
 // --- Main Store Application ---
 (function () {
@@ -485,4 +487,4 @@ tailwind.config = {
         document.getElementById('devHeroDesc').value = c.heroDesc;
         document.getElementById('devLogoIconSelect').value = c.logoIcon || 'luggage';
         document.getElementById('devLogoUrl').value = c.logoImage && c.logoImage.startsWith('http') ? c.logoImage : '';
-        document.getElementById('devShopAd
+        documen
