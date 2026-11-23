@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Srinivasa Bags — Authorized VIP Franchise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=Oswald:wght@600;700&family=Playfair+Display:wght@700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <style id="devCustomStyleTag"></style>
+</head>
+<body class="min-h-screen flex flex-col antialiased overflow-x-hidden">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-red-100 shadow-2xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- Brand -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div id="headerLogoBox" class="w-11 h-11 rounded-xl dev-brand-bg text-white flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+          <img id="headerLogoImg" src="" alt="Store Logo" class="hidden w-full h-full object-contain bg-white p-0.5" />
+          <i id="headerLogoIcon" data-lucide="luggage" class="w-5 h-5"></i>
+        </div>
+        <div class="truncate">
+          <span id="headerShopName" class="block text-xl sm:text-2xl font-black tracking-tight leading-none dev-title">Srinivasa Bags</span>
+          <span id="headerSubtitle" class="block text-[11px] font-medium text-slate-500 mt-0.5">Authorized Luggage &amp; Bag Store</span>
+        </div>
+      </div>
+
+      <!-- Cart & Owner Exit (Owner portal hidden from normal users) -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <button id="btnExitOwner" type="button" class="hidden px-3 py-2 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 min-h-[40px]">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Exit to Store</span>
+        </button>
+
+        <button id="btnOpenCart" type="button" class="relative p-2.5 rounded-xl border border-red-200 bg-white hover:bg-red-50 text-red-700 transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center" aria-label="Open Shopping Cart">
+          <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+          <span id="cartCountBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 rounded-full bg-red-600 text-white text-[11px] font-bold flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- ==================== USER STOREFRONT VIEW ==================== -->
+    <section id="userView" class="space-y-6">
+      <!-- Bright Red VIP Franchise Hero Banner -->
+      <div id="heroBannerSection" class="dev-card dev-hero-bg text-white p-6 sm:p-8 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div class="space-y-2 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/25 text-xs font-bold uppercase tracking-wider">
+            <span id="heroEyebrowText">VIP Authorized Franchise Store</span>
+          </div>
+          <h1 id="heroTitleText" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Srinivasa Bags — Travel, Office &amp; Everyday Carry</h1>
+          <p id="heroDescText" class="text-sm text-red-50">Suitcases, luggage, laptop &amp; executive bags, handbags, bottles, lunchboxes, belts, wallets, and umbrellas from top brands — with live store prices and discounts.</p>
+        </div>
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="px-4 py-2.5 rounded-xl bg-white/15 border border-white/25 backdrop-blur-sm text-center">
+            <div id="userAvailableStat" class="text-xl font-extrabold">0</div>
+            <div class="text-[11px] text-red-100">Available Items</div>
+          </div>
+          <div class="px-4 py-2.5 rounded-xl bg-slate-900/35 border border-white/25 backdrop-blur-sm text-center">
+            <div id="userDiscountStat" class="text-xl font-extrabold text-amber-300">0</div>
+            <div class="text-[11px] text-red-100">Special Offers</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Highlighted Official Brands Strip -->
+      <div id="brandsSection" class="dev-card bg-white border border-red-100 p-4 sm:p-5 shadow-sm space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-red-700 flex items-center gap-1.5">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            <span>Featured Official Brands</span>
+          </h2>
+          <button id="btnClearBrandFilter" type="button" class="hidden text-xs font-semibold text-red-600 hover:underline">Show All Brands</button>
+        </div>
+        <div id="brandLogoStrip" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5"></div>
+      </div>
+
+      <!-- Search, Category Pills & Filters -->
+      <div class="bg-white rounded-2xl border border-red-100 p-4 space-y-4 shadow-sm">
+        <div class="flex flex-col md:flex-row gap-3">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input id="userSearchInput" type="text" placeholder="Search bags, suitcases, brands, or accessories..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" />
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <label class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-red-200 bg-red-50/60 text-sm font-medium text-red-900 cursor-pointer select-none hover:bg-red-50 transition-colors min-h-[42px]">
+              <input id="userDiscountOnly" type="checkbox" class="rounded border-red-300 text-red-600 focus:ring-red-500" />
+              <span>Discounts Only</span>
+            </label>
+            <select id="userSortSelect" class="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500 min-h-[42px]">
+              <option value="featured">Sort: Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="discount-desc">Biggest Discount</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Category Filter Chips -->
+        <div id="userCategoryChips" class="flex items-center gap-2 overflow-x-auto pb-1"></div>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="userProductGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+      <!-- Empty State -->
+      <div id="userEmptyState" class="hidden bg-white rounded-2xl border border-red-100 p-12 text-center space-y-3">
+        <div class="w-12 h-12 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center mx-auto">
+          <i data-lucide="package-search" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-base font-semibold text-slate-900">No matching products available</h3>
+        <p class="text-sm text-slate-500 max-w-md mx-auto">Try clearing your search, brand, or category filters to browse other available items at Srinivasa Bags.</p>
+        <button id="btnResetUserFilters" type="button" class="px-4 py-2 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors">Reset Filters</button>
+      </div>
+    </section>
+
+    <!-- ==================== OWNER PORTAL VIEW ==================== -->
+    <section id="ownerView" class="hidden space-y-6 pb-20 md:pb-0">
+      <!-- Owner Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white rounded-2xl border border-red-100 p-5 sm:p-6 shadow-sm">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">Store Owner Mode</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">Srinivasa Bags — Inventory &amp; Pricing Manager</h1>
+          <p class="text-sm text-slate-500 mt-0.5">Upload new products, modify prices or discounts, and control what customers see.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button id="btnExportCatalog" type="button" class="px-3 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 min-h-[40px]">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Export</span>
+          </button>
+          <label class="px-3 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 cursor-pointer min-h-[40px]">
+            <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+            <span>Import</span>
+            <input id="inputImportCatalog" type="file" accept=".json,application/json" class="hidden" />
+          </label>
+          <button id="btnResetDemo" type="button" class="px-3 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium hover:bg-slate-50 transition-colors flex items-center gap-1.5 min-h-[40px]">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            <span>Reset</span>
+          </button>
+          <button id="btnOpenUploadModal" type="button" class="px-4 py-2.5 rounded-xl bg-red-600 text-white text-xs sm:text-sm font-semibold hover:bg-red-700 transition-colors shadow-sm flex items-center gap-2 min-h-[40px]">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Upload Product</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Owner KPIs -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl border border-red-100 p-4 shadow-sm">
+          <div class="text-xs font-medium text-slate-500">Total Products</div>
+          <div id="ownerStatTotal" class="text-2xl font-bold text-slate-900 mt-1">0</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-red-100 p-4 shadow-sm">
+          <div class="text-xs font-medium text-emerald-600">Available to Users</div>
+          <div id="ownerStatAvailable" class="text-2xl font-bold text-emerald-700 mt-1">0</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-red-100 p-4 shadow-sm">
+          <div class="text-xs font-medium text-amber-600">Hidden / Unavailable</div>
+          <div id="ownerStatHidden" class="text-2xl font-bold text-amber-700 mt-1">0</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-red-100 p-4 shadow-sm">
+          <div class="text-xs font-medium text-red-600">Active Discounts</div>
+          <div id="ownerStatDiscounted" class="text-2xl font-bold text-red-700 mt-1">0</div>
+        </div>
+      </div>
+
+      <!-- Owner Filter Bar -->
+      <div class="bg-white rounded-2xl border border-red-100 p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between shadow-sm">
+        <div class="relative flex-1 max-w-md">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input id="ownerSearchInput" type="text" placeholder="Search products, brands, or internal SKU..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+        </div>
+        <div class="flex items-center gap-2">
+          <select id="ownerStatusFilter" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+            <option value="all">All Statuses</option>
+            <option value="available">Available Only</option>
+            <option value="hidden">Hidden / Unavailable</option>
+            <option value="discounted">Discounted Only</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Owner Product List (Desktop Table + Mobile Cards) -->
+      <div class="bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
+        <div class="hidden md:block overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-red-50/70 border-b border-red-100 text-xs font-semibold uppercase tracking-wider text-red-900">
+                <th class="py-3.5 px-5">Product</th>
+                <th class="py-3.5 px-4">Brand &amp; Category</th>
+                <th class="py-3.5 px-4">Base Price</th>
+                <th class="py-3.5 px-4">Discount</th>
+                <th class="py-3.5 px-4">Final Price</th>
+                <th class="py-3.5 px-4">User Visibility</th>
+                <th class="py-3.5 px-5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ownerTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
+        <div id="ownerMobileList" class="md:hidden divide-y divide-slate-100"></div>
+        <div id="ownerEmptyState" class="hidden p-10 text-center space-y-2">
+          <p class="text-sm font-medium text-slate-700">No products match your filter.</p>
+          <p class="text-xs text-slate-500">Tap "Upload Product" to add a new item to your store.</p>
+        </div>
+      </div>
+
+      <!-- Sticky Mobile Owner Quick Bar (Thumb-friendly) -->
+      <div class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-red-100 px-4 py-2.5 flex items-center gap-2.5 shadow-lg">
+        <button id="btnMobileUpload" type="button" class="flex-1 min-h-[44px] px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold flex items-center justify-center gap-2 shadow-sm">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Upload Product</span>
+        </button>
+        <button id="btnMobileExitOwner" type="button" class="min-h-[44px] px-3.5 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm font-semibold flex items-center justify-center gap-1.5">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <span>Store</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== DEVELOPER MODE VIEW ==================== -->
+    <section id="developerView" class="hidden space-y-6 pb-16">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-md">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/15 text-amber-300">Developer Studio</span>
+          <h1 class="text-xl sm:text-2xl font-bold mt-1.5">UI Theme, Fonts, Elements &amp; Social Links</h1>
+          <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Customize colors, fonts, UI visibility, and social media links live across all devices.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button id="btnDevReset" type="button" class="px-3 py-2 rounded-xl border border-white/20 text-xs sm:text-sm font-medium hover:bg-white/10 min-h-[40px]">Reset Theme</button>
+          <button id="btnDevToOwner" type="button" class="px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-xs sm:text-sm font-semibold min-h-[40px]">Owner Portal</button>
+          <button id="btnDevToStore" type="button" class="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-xs sm:text-sm font-semibold min-h-[40px]">View Store</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Colors & Presets -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="palette" class="w-4 h-4 text-red-600"></i>
+            <span>Colors &amp; Theme Presets</span>
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-theme-preset="red" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600 text-white">Bright Red (Default)</button>
+            <button type="button" data-theme-preset="indigo" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white">Royal Indigo</button>
+            <button type="button" data-theme-preset="emerald" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white">Emerald</button>
+            <button type="button" data-theme-preset="dark" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white">Midnight</button>
+          </div>
+          <div class="grid grid-cols-2 gap-4 pt-1">
+            <label class="space-y-1">
+              <span class="block text-xs font-semibold text-slate-600">Primary Brand Color</span>
+              <input id="devPrimaryColor" type="color" value="#dc2626" class="w-full h-10 rounded-lg border border-slate-200 cursor-pointer" />
+            </label>
+            <label class="space-y-1">
+              <span class="block text-xs font-semibold text-slate-600">Shop Name Color</span>
+              <input id="devTitleColor" type="color" value="#dc2626" class="w-full h-10 rounded-lg border border-slate-200 cursor-pointer" />
+            </label>
+            <label class="space-y-1">
+              <span class="block text-xs font-semibold text-slate-600">Page Background</span>
+              <input id="devBgColor" type="color" value="#fff5f5" class="w-full h-10 rounded-lg border border-slate-200 cursor-pointer" />
+            </label>
+            <label class="space-y-1">
+              <span class="block text-xs font-semibold text-slate-600">Body Text Color</span>
+              <input id="devTextColor" type="color" value="#0f172a" class="w-full h-10 rounded-lg border border-slate-200 cursor-pointer" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Custom Logo & Shop Address -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="image" class="w-4 h-4 text-red-600"></i>
+            <span>Store Logo &amp; Shop Address</span>
+          </h2>
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0">
+              <img id="devLogoPreview" src="" alt="Logo Preview" class="hidden w-full h-full object-contain" />
+              <i id="devLogoPlaceholder" data-lucide="luggage" class="w-6 h-6 text-slate-400"></i>
+            </div>
+            <div class="flex-1 space-y-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <label class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-semibold cursor-pointer hover:bg-red-100">
+                  <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                  <span>Upload Logo</span>
+                  <input id="devLogoFile" type="file" accept="image/*" class="hidden" />
+                </label>
+                <button id="btnDevClearLogo" type="button" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:bg-slate-50">Use Icon</button>
+                <select id="devLogoIconSelect" class="px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs bg-white">
+                  <option value="luggage">Icon: Luggage</option>
+                  <option value="shopping-bag">Icon: Bag</option>
+                  <option value="briefcase">Icon: Briefcase</option>
+                  <option value="crown">Icon: Crown</option>
+                  <option value="store">Icon: Store</option>
+                </select>
+              </div>
+              <input id="devLogoUrl" type="url" placeholder="Or paste logo image URL (https://...)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs" />
+            </div>
+          </div>
+          <div class="space-y-2.5 pt-1">
+            <div>
+              <label for="devShopAddress" class="block text-xs font-semibold text-slate-600 mb-1">Shop Address</label>
+              <input id="devShopAddress" type="text" placeholder="Brodipet 4th lane,beside ramraj showroom,near shankar villas,Guntur,Andhra Pradesh" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="devShopPhone" class="block text-xs font-semibold text-slate-600 mb-1">Contact Phone</label>
+                <input id="devShopPhone" type="text" placeholder="e.g. +91 98765 43210" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+              </div>
+              <div>
+                <label for="devShopHours" class="block text-xs font-semibold text-slate-600 mb-1">Store Hours</label>
+                <input id="devShopHours" type="text" placeholder="e.g. 9:30 AM – 9:30 PM" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fonts & Store Identity -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="type" class="w-4 h-4 text-red-600"></i>
+            <span>Typography &amp; Store Identity</span>
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label for="devShopName" class="block text-xs font-semibold text-slate-600 mb-1">Shop Name</label>
+              <input id="devShopName" type="text" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+            </div>
+            <div>
+              <label for="devShopSubtitle" class="block text-xs font-semibold text-slate-600 mb-1">Header Subtitle</label>
+              <input id="devShopSubtitle" type="text" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+            </div>
+            <div>
+              <label for="devTitleFont" class="block text-xs font-semibold text-slate-600 mb-1">Shop Name Font</label>
+              <select id="devTitleFont" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                <option value="'Playfair Display', Georgia, serif">Playfair Display (Stylish Serif)</option>
+                <option value="'Oswald', sans-serif">Oswald (Bold Display)</option>
+                <option value="'Montserrat', sans-serif">Montserrat (Modern)</option>
+                <option value="'Poppins', sans-serif">Poppins (Clean)</option>
+                <option value="'Inter', sans-serif">Inter (Minimal)</option>
+              </select>
+            </div>
+            <div>
+              <label for="devBodyFont" class="block text-xs font-semibold text-slate-600 mb-1">Body Font</label>
+              <select id="devBodyFont" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                <option value="'Inter', system-ui, sans-serif">Inter</option>
+                <option value="'Poppins', system-ui, sans-serif">Poppins</option>
+                <option value="'Montserrat', system-ui, sans-serif">Montserrat</option>
+              </select>
+            </div>
+            <div>
+              <label for="devTitleSize" class="block text-xs font-semibold text-slate-600 mb-1">Shop Name Size</label>
+              <select id="devTitleSize" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                <option value="sm">Standard</option>
+                <option value="md">Large (Default)</option>
+                <option value="lg">Extra Large</option>
+              </select>
+            </div>
+            <div>
+              <label for="devCardRadius" class="block text-xs font-semibold text-slate-600 mb-1">UI Corner Radius</label>
+              <select id="devCardRadius" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+                <option value="6px">Sharp (6px)</option>
+                <option value="16px">Rounded (16px)</option>
+                <option value="24px">Soft Pill (24px)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- UI Elements & Hero Editor -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="layout" class="w-4 h-4 text-red-600"></i>
+            <span>UI Elements &amp; Hero Banner</span>
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 text-xs font-semibold cursor-pointer">
+              <input id="devToggleHero" type="checkbox" class="rounded text-red-600" />
+              <span>Show Hero</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 text-xs font-semibold cursor-pointer">
+              <input id="devToggleBrands" type="checkbox" class="rounded text-red-600" />
+              <span>Show Brands</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 text-xs font-semibold cursor-pointer">
+              <input id="devToggleCart" type="checkbox" class="rounded text-red-600" />
+              <span>Show Cart</span>
+            </label>
+          </div>
+          <div class="space-y-2.5">
+            <div>
+              <label for="devHeroEyebrow" class="block text-xs font-semibold text-slate-600 mb-1">Hero Badge Text</label>
+              <input id="devHeroEyebrow" type="text" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+            </div>
+            <div>
+              <label for="devHeroTitle" class="block text-xs font-semibold text-slate-600 mb-1">Hero Headline</label>
+              <input id="devHeroTitle" type="text" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+            </div>
+            <div>
+              <label for="devHeroDesc" class="block text-xs font-semibold text-slate-600 mb-1">Hero Description</label>
+              <textarea id="devHeroDesc" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Platform Links Manager -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="share-2" class="w-4 h-4 text-red-600"></i>
+            <span>Social Platform Links</span>
+          </h2>
+          <form id="devSocialForm" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <select id="devSocialPlatform" class="px-3 py-2 rounded-xl border border-slate-200 text-sm bg-white">
+              <option value="Instagram">Instagram</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Facebook">Facebook</option>
+              <option value="YouTube">YouTube</option>
+              <option value="X / Twitter">X / Twitter</option>
+              <option value="Google Maps">Google Maps</option>
+              <option value="Website">Website</option>
+            </select>
+            <input id="devSocialUrl" type="url" required placeholder="https://instagram.com/..." class="sm:col-span-2 px-3 py-2 rounded-xl border border-slate-200 text-sm" />
+            <button type="submit" class="sm:col-span-3 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold">Add Social Link</button>
+          </form>
+          <div id="devSocialList" class="space-y-2 max-h-56 overflow-y-auto"></div>
+        </div>
+
+        <!-- Custom CSS & Raw Data Editor -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="terminal" class="w-4 h-4 text-red-600"></i>
+              <span>Custom CSS Styles &amp; Store Data Editor</span>
+            </h2>
+            <div class="flex items-center gap-2">
+              <button id="btnDevLoadRawData" type="button" class="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50">Refresh Data</button>
+              <button id="btnDevApplyRawData" type="button" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800">Apply Data Changes</button>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+              <label for="devCustomCss" class="block text-xs font-semibold text-slate-600 mb-1">Custom CSS Rules (Applied Live)</label>
+              <textarea id="devCustomCss" rows="5" placeholder="/* e.g. header { border-bottom-width: 2px; } */" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono"></textarea>
+            </div>
+            <div>
+              <label for="devRawDataJson" class="block text-xs font-semibold text-slate-600 mb-1">Store Products &amp; Config JSON (Edit Any Data)</label>
+              <textarea id="devRawDataJson" rows="5" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODALS & DRAWERS ==================== -->
+
+  <!-- Product Detail Modal (Customer View) -->
+  <div id="productDetailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl border border-red-100">
+      <div class="relative aspect-[4/3] bg-slate-100">
+        <img id="detailImg" src="" alt="" class="w-full h-full object-cover" />
+        <button id="btnCloseDetailModal" type="button" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-slate-700 flex items-center justify-center shadow-sm">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <span id="detailDiscountBadge" class="hidden absolute top-3 left-3 px-2.5 py-1 rounded-full bg-red-600 text-white text-xs font-bold shadow-sm"></span>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="detailBrand" class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-50 text-red-700"></span>
+            <span id="detailCategory" class="text-xs font-semibold uppercase tracking-wider text-slate-500"></span>
+          </div>
+          <h2 id="detailName" class="text-xl font-bold text-slate-900 mt-1.5"></h2>
+        </div>
+        <div class="flex items-baseline gap-2.5">
+          <span id="detailFinalPrice" class="text-2xl font-bold text-slate-900"></span>
+          <span id="detailOriginalPrice" class="hidden text-sm text-slate-400 line-through"></span>
+          <span id="detailSavingsText" class="hidden text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full"></span>
+        </div>
+        <p id="detailDescription" class="text-sm text-slate-600 leading-relaxed"></p>
+        <div class="pt-2 flex items-center gap-3">
+          <button id="btnDetailAddToCart" type="button" class="flex-1 py-3 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span>Add to Cart</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner Upload / Modify Product Modal -->
+  <div id="ownerProductModal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/50 backdrop-blur-xs overflow-y-auto">
+    <div class="bg-white rounded-t-2xl sm:rounded-2xl max-w-lg w-full shadow-2xl border border-red-100 sm:my-auto overflow-hidden">
+      <div class="px-5 sm:px-6 py-4 border-b border-red-100 bg-red-50/40 flex items-center justify-between">
+        <h2 id="ownerModalTitle" class="text-lg font-bold text-slate-900">Upload New Product</h2>
+        <button id="btnCloseOwnerModal" type="button" class="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 min-h-[40px] min-w-[40px] flex items-center justify-center">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form id="ownerProductForm" class="p-5 sm:p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+        <input type="hidden" id="editProductId" value="" />
+
+        <!-- Image Upload & Preview -->
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600">Product Image</label>
+          <div class="flex items-center gap-4">
+            <div class="w-24 h-20 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
+              <img id="formImgPreview" src="" alt="Preview" class="w-full h-full object-cover hidden" />
+              <i id="formImgPlaceholder" data-lucide="image" class="w-6 h-6 text-slate-400"></i>
+            </div>
+            <div class="flex-1 space-y-2">
+              <label class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-xs font-semibold text-red-700 cursor-pointer transition-colors">
+                <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                <span>Upload Image File</span>
+                <input id="formImageFile" type="file" accept="image/*" class="hidden" />
+              </label>
+              <input id="formImageUrl" type="url" placeholder="Or paste image URL (https://...)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-red-500" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="formName" class="block text-xs font-semibold text-slate-700 mb-1">Product Name *</label>
+          <input id="formName" type="text" required placeholder="e.g. VIP Skyscraper 55cm Suitcase" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="formBrand" class="block text-xs font-semibold text-slate-700 mb-1">Brand *</label>
+            <input id="formBrand" type="text" required list="brandSuggestions" placeholder="e.g. VIP" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <datalist id="brandSuggestions">
+              <option value="VIP"></option>
+              <option value="American Tourister"></option>
+              <option value="Safari"></option>
+              <option value="Wildcraft"></option>
+              <option value="Skybags"></option>
+              <option value="Genie"></option>
+              <option value="Kamiliant"></option>
+            </datalist>
+          </div>
+          <div>
+            <label for="formCategory" class="block text-xs font-semibold text-slate-700 mb-1">Category *</label>
+            <input id="formCategory" type="text" required list="categorySuggestions" placeholder="e.g. Suitcases" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <datalist id="categorySuggestions">
+              <option value="Luggage Bags"></option>
+              <option value="Duffle Bags"></option>
+              <option value="Laptop Bags"></option>
+              <option value="Suitcases"></option>
+              <option value="Carriage Bags"></option>
+              <option value="Casual Backpacks"></option>
+              <option value="Handbags"></option>
+              <option value="Office Executive Bags"></option>
+              <option value="Sling Bags"></option>
+              <option value="Hand Pouches"></option>
+              <option value="Water Bottles"></option>
+              <option value="Lunchbox"></option>
+              <option value="Belts"></option>
+              <option value="Wallet (Men)"></option>
+              <option value="Umbrellas"></option>
+            </datalist>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="formPrice" class="block text-xs font-semibold text-slate-700 mb-1">Price (₹) *</label>
+            <input id="formPrice" type="number" min="1" step="1" required placeholder="4999" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+          </div>
+          <div>
+            <label for="formDiscount" class="block text-xs font-semibold text-slate-700 mb-1">Discount (%)</label>
+            <input id="formDiscount" type="number" min="0" max="95" step="1" value="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+          </div>
+        </div>
+
+        <!-- Live Price Preview -->
+        <div class="rounded-xl bg-red-50 border border-red-100 px-4 py-2.5 flex items-center justify-between text-xs">
+          <span class="text-red-900 font-medium">Customer Final Price Preview:</span>
+          <span id="formFinalPricePreview" class="text-sm font-bold text-red-700">₹0</span>
+        </div>
+
+        <div>
+          <label for="formDescription" class="block text-xs font-semibold text-slate-700 mb-1">Product Details (Shown to Users if Available)</label>
+          <textarea id="formDescription" rows="3" placeholder="Size, material, warranty, or key features..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
+        </div>
+
+        <div>
+          <label for="formInternalNote" class="block text-xs font-semibold text-slate-700 mb-1">Internal SKU / Owner Note <span class="text-slate-400 font-normal">(Owner Only)</span></label>
+          <input id="formInternalNote" type="text" placeholder="e.g. SKU-VIP-104 • Rack A" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+        </div>
+
+        <label class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer">
+          <div>
+            <div class="text-sm font-semibold text-slate-900">Available to Customers</div>
+            <div class="text-xs text-slate-500">Turn off to hide this product from the User Storefront.</div>
+          </div>
+          <input id="formAvailable" type="checkbox" checked class="w-5 h-5 rounded border-slate-300 text-red-600 focus:ring-red-500" />
+        </label>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5 border-t border-slate-100">
+          <button id="btnCancelOwnerModal" type="button" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold shadow-sm">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- In-Page Confirmation Modal -->
+  <div id="confirmModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="space-y-1.5">
+        <h3 id="confirmTitle" class="text-base font-bold text-slate-900">Confirm Action</h3>
+        <p id="confirmMessage" class="text-sm text-slate-600"></p>
+      </div>
+      <div class="flex items-center justify-end gap-2.5">
+        <button id="btnConfirmCancel" type="button" class="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+        <button id="btnConfirmOk" type="button" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping Cart Drawer -->
+  <div id="cartDrawer" class="hidden fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-xs">
+    <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl">
+      <div class="px-6 py-4 border-b border-red-100 flex items-center justify-between">
+        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-red-600"></i>
+          <span>Your Cart</span>
+        </h2>
+        <button id="btnCloseCart" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+      <div class="p-6 border-t border-red-100 bg-red-50/40 space-y-3">
+        <div class="flex items-center justify-between text-xs text-emerald-700 font-medium">
+          <span>Discount Savings</span>
+          <span id="cartSavingsTotal">₹0</span>
+        </div>
+        <div class="flex items-center justify-between text-base font-bold text-slate-900">
+          <span>Total</span>
+          <span id="cartSubtotal">₹0</span>
+        </div>
+        <button id="btnCheckout" type="button" class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          Place Order
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer with Social Links & Discreet Admin/Dev Access -->
+  <footer class="border-t border-red-100 bg-white mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div id="footerAddressBlock" class="text-xs text-slate-600 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span class="inline-flex items-center gap-1.5 font-medium text-slate-700">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-red-600"></i>
+            <span id="footerAddressText">BRODIPET 4TH LANE, BESIDE RAMRAJ SHOWROOM, NEAR SHANKAR VILLAS, GUNTUR, ANDHRA PRADESH</span>
+          </span>
+          <span id="footerPhoneWrap" class="inline-flex items-center gap-1 text-slate-500">
+            <i data-lucide="phone" class="w-3 h-3 text-red-500"></i>
+            <span id="footerPhoneText">+91 9948517724</span>
+          </span>
+          <span id="footerHoursWrap" class="inline-flex items-center gap-1 text-slate-500">
+            <i data-lucide="clock" class="w-3 h-3 text-red-500"></i>
+            <span id="footerHoursText">9:30 AM – 9:30 PM</span>
+          </span>
+        </div>
+        <div id="footerSocialLinks" class="flex flex-wrap items-center justify-center sm:justify-end gap-2"></div>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 pt-2 border-t border-slate-100">
+        <span id="footerCopyright">&copy; 2026 Srinivasa Bags | All rights reserved.</span>
+        <div class="flex items-center gap-4">
+          <button id="btnOwnerAccess" type="button" class="inline-flex items-center gap-1 text-slate-400 hover:text-red-600 transition-colors py-1">
+            <i data-lucide="lock" class="w-3 h-3"></i>
+            <span>Store Admin</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Owner Passcode Modal -->
+  <div id="ownerAuthModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-red-100 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </div>
+          <h3 id="authModalTitle" class="text-base font-bold text-slate-900">Owner Verification</h3>
+        </div>
+        <button id="btnCloseAuthModal" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500">Enter the passcode to access.</p>
+      <form id="ownerAuthForm" class="space-y-3">
+        <input id="ownerPinInput" type="password" maxlength="24" required placeholder="Enter passcode" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
+        <p id="ownerAuthError" class="hidden text-xs font-medium text-red-600">Incorrect passcode. Please try again.</p>
+        <div class="flex items-center justify-end gap-2 pt-1">
+          <button id="btnCancelAuth" type="button" class="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold">Unlock Portal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+  <script src="app.js"></script>
+</body>
+</html>

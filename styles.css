@@ -1,0 +1,43 @@
+:root {
+      --brand-primary: #dc2626;
+      --brand-secondary: #b91c1c;
+      --page-bg: #fff5f5;
+      --title-color: #dc2626;
+      --text-color: #0f172a;
+      --title-font: 'Playfair Display', Georgia, serif;
+      --body-font: 'Inter', system-ui, -apple-system, sans-serif;
+      --card-radius: 16px;
+      --card-bg: #ffffff;
+    }
+    body {
+      font-family: var(--body-font);
+      background-color: var(--page-bg);
+      color: var(--text-color);
+    }
+    .dev-title {
+      font-family: var(--title-font);
+      color: var(--title-color);
+    }
+    .dev-brand-bg {
+      background-color: var(--brand-primary) !important;
+    }
+    .dev-hero-bg {
+      background: linear-gradient(to right, var(--brand-secondary), var(--brand-primary)) !important;
+    }
+    .dev-card {
+      border-radius: var(--card-radius) !important;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .toast-enter {
+      animation: slideUp 0.22s ease-out forwards;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
