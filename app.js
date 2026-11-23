@@ -13,6 +13,7 @@ tailwind.config = {
 (function () {
       const STORAGE_KEY = 'srinivasa_bags_vip_v1';
       const DEV_STORAGE_KEY = 'srinivasa_bags_dev_config_v1';
+      const GH_AUTH_KEY = 'srinivasa_bags_gh_auth_v1';
 
       const DEFAULT_DEV_CONFIG = {
         primaryColor: '#dc2626',
@@ -37,6 +38,7 @@ tailwind.config = {
         shopPhone: '+91 98765 43210',
         shopHours: '9:30 AM – 9:30 PM',
         customCss: '',
+
         socialLinks: [
           { id: 'soc-1', platform: 'Instagram', url: 'https://instagram.com/' },
           { id: 'soc-2', platform: 'WhatsApp', url: 'https://wa.me/' }
@@ -189,6 +191,7 @@ tailwind.config = {
         try {
           localStorage.setItem(DEV_STORAGE_KEY, JSON.stringify(state.devConfig));
         } catch (e) {}
+        syncToCloud(false);
       }
 
       // State
@@ -220,10 +223,109 @@ tailwind.config = {
         return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
       }
 
+      function loadGhAuth() {
+        try {
+          const raw = localStorage.getItem(GH_AUTH_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return { owner: '', repo: '', branch: 'main', token: '' };
+      }
+
+      function saveGhAuth(auth) {
+        try {
+          localStorage.setItem(GH_AUTH_KEY, JSON.stringify(auth));
+        } catch (e) {}
+      }
+
+      function updateCloudBadge(text, ok) {
+        const el = document.getElementById('devCloudStatus');
+        if (!el) return;
+        el.textContent = text;
+        el.className = ok
+          ? 'text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700'
+          : 'text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600';
+      }
+
+      async function syncToCloud(showMessage = false) {
+        const auth = loadGhAuth();
+        if (!auth.owner || !auth.repo || !auth.token) {
+          updateCloudBadge('Local Mode (Set GitHub Token in Dev Mode)', false);
+          return;
+        }
+        const branch = auth.branch || 'main';
+        const apiUrl = `https://api.github.com/repos/${encodeURIComponent(auth.owner)}/${encodeURIComponent(auth.repo)}/contents/catalog.json`;
+        try {
+          let sha = undefined;
+          const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, {
+            headers: {
+              'Authorization': `Bearer ${auth.token}`,
+              'Accept': 'application/vnd.github+json'
+            }
+          });
+          if (getRes.ok) {
+            const existing = await getRes.json();
+            sha = existing.sha;
+          }
+
+          const payload = {
+            products: state.products,
+            devConfig: state.devConfig,
+            updatedAt: new Date().toISOString()
+          };
+          const jsonStr = JSON.stringify(payload, null, 2);
+          const contentB64 = btoa(unescape(encodeURIComponent(jsonStr)));
+
+          const body = {
+            message: 'Update Srinivasa Bags catalog.json',
+            content: contentB64,
+            branch
+          };
+          if (sha) body.sha = sha;
+
+          const putRes = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${auth.token}`,
+              'Accept': 'application/vnd.github+json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+          });
+          if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
+          updateCloudBadge('Published to GitHub', true);
+          if (showMessage) showToast('Published to GitHub! Live in ~30s.');
+        } catch (err) {
+          updateCloudBadge('GitHub Sync Error (Check Token/Repo)', false);
+          if (showMessage) showToast('GitHub publish failed: check repo & token', 'error');
+        }
+      }
+
+      async function loadFromCloud(showMessage = false) {
+        try {
+          const res = await fetch(`./catalog.json?t=${Date.now()}`);
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data && Array.isArray(data.products)) {
+            state.products = data.products;
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.products)); } catch (e) {}
+          }
+          if (data && data.devConfig && typeof data.devConfig === 'object') {
+            state.devConfig = { ...DEFAULT_DEV_CONFIG, ...data.devConfig };
+            try { localStorage.setItem(DEV_STORAGE_KEY, JSON.stringify(state.devConfig)); } catch (e) {}
+          }
+          applyDevConfig();
+          renderAll();
+          if (showMessage) showToast('Reloaded catalog.json');
+        } catch (err) {
+          if (showMessage) showToast('No catalog.json found yet', 'error');
+        }
+      }
+
       function saveProducts() {
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state.products));
         } catch (e) {}
+        syncToCloud(false);
       }
 
       function formatINR(num) {
@@ -271,6 +373,120 @@ tailwind.config = {
         root.style.setProperty('--card-radius', c.cardRadius);
 
         const shopEl = document.getElementById('headerShopName');
+        shopEl.textContent = c.shopName || 'Srinivasa Bags';
+        shopEl.classList.remove('text-lg', 'sm:text-xl', 'text-xl', 'sm:text-2xl', 'text-2xl', 'sm:text-3xl');
+        if (c.titleSize === 'sm') shopEl.classList.add('text-lg', 'sm:text-xl');
+        else if (c.titleSize === 'lg') shopEl.classList.add('text-2xl', 'sm:text-3xl');
+        else shopEl.classList.add('text-xl', 'sm:text-2xl');
+
+        if (state.mode === 'user') {
+          headerSubtitle.textContent = c.shopSubtitle || 'Authorized Luggage & Bag Store';
+        }
+
+        document.getElementById('heroBannerSection').classList.toggle('hidden', !c.showHero);
+        document.getElementById('brandsSection').classList.toggle('hidden', !c.showBrands);
+        if (state.mode === 'user') {
+          btnOpenCart.classList.toggle('hidden', !c.showCart);
+        }
+
+        document.getElementById('heroEyebrowText').textContent = c.heroEyebrow;
+        document.getElementById('heroTitleText').textContent = c.heroTitle;
+        document.getElementById('heroDescText').textContent = c.heroDesc;
+        document.getElementById('footerCopyright').innerHTML = `&copy; 2026 ${escapeHtml(c.shopName)}. All rights reserved.`;
+
+        // Logo
+        const headerLogoImg = document.getElementById('headerLogoImg');
+        const headerLogoIcon = document.getElementById('headerLogoIcon');
+        if (c.logoImage) {
+          headerLogoImg.src = c.logoImage;
+          headerLogoImg.classList.remove('hidden');
+          headerLogoIcon.classList.add('hidden');
+        } else {
+          headerLogoImg.classList.add('hidden');
+          headerLogoIcon.setAttribute('data-lucide', c.logoIcon || 'luggage');
+          headerLogoIcon.classList.remove('hidden');
+        }
+
+        // Address & Contact
+        document.getElementById('footerAddressText').textContent = c.shopAddress || '';
+        document.getElementById('footerAddressBlock').classList.toggle('hidden', !c.shopAddress && !c.shopPhone && !c.shopHours);
+        document.getElementById('footerPhoneText').textContent = c.shopPhone || '';
+        document.getElementById('footerPhoneWrap').classList.toggle('hidden', !c.shopPhone);
+        document.getElementById('footerHoursText').textContent = c.shopHours || '';
+        document.getElementById('footerHoursWrap').classList.toggle('hidden', !c.shopHours);
+
+        // Custom CSS
+        document.getElementById('devCustomStyleTag').textContent = c.customCss || '';
+
+        renderSocialLinks();
+      }
+
+      function renderSocialLinks() {
+        const footerContainer = document.getElementById('footerSocialLinks');
+        const devList = document.getElementById('devSocialList');
+        const links = state.devConfig.socialLinks || [];
+
+        footerContainer.innerHTML = '';
+        if (links.length === 0) {
+          footerContainer.classList.add('hidden');
+        } else {
+          footerContainer.classList.remove('hidden');
+          links.forEach(item => {
+            const a = document.createElement('a');
+            a.href = item.url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-red-200 bg-red-50/70 hover:bg-red-100 text-xs font-semibold text-red-700 transition-colors';
+            a.innerHTML = `<i data-lucide="external-link" class="w-3 h-3"></i><span>${escapeHtml(item.platform)}</span>`;
+            footerContainer.appendChild(a);
+          });
+        }
+
+        if (devList) {
+          devList.innerHTML = '';
+          if (links.length === 0) {
+            devList.innerHTML = '<p class="text-xs text-slate-400">No social links added yet.</p>';
+          } else {
+            links.forEach(item => {
+              const row = document.createElement('div');
+              row.className = 'flex items-center justify-between gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs';
+              row.innerHTML = `
+                <div class="min-w-0">
+                  <span class="font-bold text-slate-800">${escapeHtml(item.platform)}</span>
+                  <div class="text-slate-500 truncate">${escapeHtml(item.url)}</div>
+                </div>
+                <button type="button" data-del-social="${item.id}" class="p-1.5 rounded-lg text-red-600 hover:bg-red-100 shrink-0" aria-label="Remove social link">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              `;
+              devList.appendChild(row);
+            });
+          }
+        }
+      }
+
+      function syncDevInputs() {
+        const c = state.devConfig;
+        document.getElementById('devPrimaryColor').value = c.primaryColor;
+        document.getElementById('devTitleColor').value = c.titleColor;
+        document.getElementById('devBgColor').value = c.bgColor;
+        document.getElementById('devTextColor').value = c.textColor;
+        document.getElementById('devShopName').value = c.shopName;
+        document.getElementById('devShopSubtitle').value = c.shopSubtitle;
+        document.getElementById('devTitleFont').value = c.titleFont;
+        document.getElementById('devBodyFont').value = c.bodyFont;
+        document.getElementById('devTitleSize').value = c.titleSize;
+        document.getElementById('devCardRadius').value = c.cardRadius;
+        document.getElementById('devToggleHero').checked = c.showHero;
+        document.getElementById('devToggleBrands').checked = c.showBrands;
+        document.getElementById('devToggleCart').checked = c.showCart;
+        document.getElementById('devHeroEyebrow').value = c.heroEyebrow;
+        document.getElementById('devHeroTitle').value = c.heroTitle;
+        document.getElementById('devHeroDesc').value = c.heroDesc;
+        document.getElementById('devLogoIconSelect').value = c.logoIcon || 'luggage';
+        document.getElementById('devLogoUrl').value = c.logoImage && c.logoImage.startsWith('http') ? c.logoImage : '';
+        document.getElementById('devShopAddress').value = c.shopAddress || '';
+        documnst shopEl = document.getElementById('headerShopName');
         shopEl.textContent = c.shopName || 'Srinivasa Bags';
         shopEl.classList.remove('text-lg', 'sm:text-xl', 'text-xl', 'sm:text-2xl', 'text-2xl', 'sm:text-3xl');
         if (c.titleSize === 'sm') shopEl.classList.add('text-lg', 'sm:text-xl');
