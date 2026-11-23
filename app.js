@@ -1435,6 +1435,26 @@ tailwind.config = {
         showToast('Order placed! Thank you for shopping at Srinivasa Bags.');
       });
 
-      // Initial render
+      // Secret mobile Developer Mode trigger: 5 rapid taps on copyright text
+      let devTapCount = 0;
+      let devTapTimer = null;
+      const footerCopy = document.getElementById('footerCopyright');
+      if (footerCopy) {
+        footerCopy.addEventListener('click', () => {
+          devTapCount += 1;
+          clearTimeout(devTapTimer);
+          if (devTapCount >= 5) {
+            devTapCount = 0;
+            openAuthModal('developer');
+          } else {
+            devTapTimer = setTimeout(() => { devTapCount = 0; }, 1500);
+          }
+        });
+      }
+
+      // Initial render (supports #dev URL hash on mobile)
       setMode('user');
+      if (window.location.hash === '#dev') {
+        openAuthModal('developer');
+      }
     })();
