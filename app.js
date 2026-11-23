@@ -1182,12 +1182,14 @@ tailwind.config = {
       document.getElementById('ownerAuthForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const pin = document.getElementById('ownerPinInput').value.trim();
-        const target = state.authTargetMode || 'owner';
-        const expected = target === 'developer' ? DEV_PASSCODE : OWNER_PASSCODE;
-        if (pin === expected) {
+        if (pin === DEV_PASSCODE) {
           closeAuthModal();
-          setMode(target);
-          showToast(target === 'developer' ? 'Developer Mode unlocked' : 'Owner Portal unlocked');
+          setMode('developer');
+          showToast('Developer Mode unlocked');
+        } else if (pin === OWNER_PASSCODE && state.authTargetMode !== 'developer') {
+          closeAuthModal();
+          setMode('owner');
+          showToast('Owner Portal unlocked');
         } else {
           document.getElementById('ownerAuthError').classList.remove('hidden');
         }
@@ -1434,23 +1436,6 @@ tailwind.config = {
         document.getElementById('cartDrawer').classList.add('hidden');
         showToast('Order placed! Thank you for shopping at Srinivasa Bags.');
       });
-
-      // Secret mobile Developer Mode trigger: 5 rapid taps on copyright text
-      let devTapCount = 0;
-      let devTapTimer = null;
-      const footerCopy = document.getElementById('footerCopyright');
-      if (footerCopy) {
-        footerCopy.addEventListener('click', () => {
-          devTapCount += 1;
-          clearTimeout(devTapTimer);
-          if (devTapCount >= 5) {
-            devTapCount = 0;
-            openAuthModal('developer');
-          } else {
-            devTapTimer = setTimeout(() => { devTapCount = 0; }, 1500);
-          }
-        });
-      }
 
       // Initial render (supports #dev URL hash on mobile)
       setMode('user');
